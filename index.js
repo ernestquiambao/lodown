@@ -372,7 +372,9 @@ module.exports.some = some;
  * reduce: Function takes in an array, a function and a seed value.  The function will iterate through the input array passing each element of the input array into the function input with the arguments of: previous result, current element, and input array.  On the last iteration, the function will return the result of the last function call. 
  * 
  * @param { An Array }: Function takes in an input array.
- * @param { }
+ * @param { A Function }: Function takes in an input function.
+ * 
+ * @return { A Value }: Function will return the value of the last iteration of the function call.
  */
 function reduce(array, func, seed){
     //  create result variable
@@ -393,3 +395,23 @@ function reduce(array, func, seed){
 return result;
 }
 module.exports.reduce = reduce;
+
+/**
+ * extend: Function takes in an object and any additional number of objects, then returns the first object updated with all the properties from all other objects.
+ * 
+ * @param { An Object }: Function takes in an object input.
+ * @param { ...Objects }: Function takes in any number of additional object inputs.
+ * 
+ * @return { An Object }: Function returns the first object updated with all the properties from the other objects.
+ */
+function extend(object1, ...moreObjects){
+    for (var i = 0; i < moreObjects.length; i++){//  iterate through moreObjects
+        Object.assign(object1, moreObjects[i]);// assign current iteration to object1
+    }
+    return object1;//  return object
+}
+module.exports.extend = extend;
+
+/**
+ * 
+ */

@@ -147,8 +147,8 @@ module.exports.contains = contains;
 /**
  * each: Function takes a collection and a function.  If the collection is an array, the function calls the function for each element in the array with the element, index, and array as arguments.  If the collection is an object, the function calls the function for each property with the value, key, and object as arguments.
  * 
- * @param { A Collection }: Function takes in a collection.
- * @param { A Function }: Function takes in a function.
+ * @param { A Collection }: Function takes in a collection input
+ * @param { A Function }: Function takes in a function input
  */
 function each(collection, func){
     if (Array.isArray(collection)){ //  tests if collection is an array
@@ -164,5 +164,232 @@ function each(collection, func){
 module.exports.each = each;
 
 /**
+ * unique: Function takes an array and returns an new array with duplicate values removed.
  * 
+ * @param { An Array }: Function takes in an array as an input
+ * 
+ * @return { An Array }: Function returns an array containing the values from the input array with duplicate values removed.
  */
+function unique(array){
+    let newArr = [];    //  initialize newArr array
+    for (var i = 0; i < array.length; i++){ //  iterate through array
+        if (newArr.indexOf(array[i]) === - 1){  //  tests if newArr does not contain current iteration element
+            newArr.push(array[i]);  //  push current element into newArr
+        }
+    }
+return newArr;  //  returns newArr
+}
+module.exports.unique = unique;
+
+/**
+ * filter: Function takes an array input and a function input, then calls the input function for each element of the input array, pushing values for which the function resolved to true.
+ * 
+ * @param { An Array }: Function takes in an array input
+ * @param { A Function }: Function takes an input function.
+ * 
+ * @return { An Array }: Function returns a new array with values from the input array that have resolved true when passed into input function.
+ */
+function filter(array, func){
+    var newArray = [];  //  initialize newArray with value of empty of array
+    for (var i = 0; i < array.length; i++){ //  iterate over array
+        if (func(array[i], i, array)){  //  test if passing element, index, and array returns true
+            newArray.push(array[i]);    //  if true, push element into newArray
+        }
+    }
+return newArray;    //  returns newArray
+}
+module.exports.filter = filter;
+
+/**
+ * reject: Function takes in an array input and a function input, then returns an array filled with values from the input array where passing into the input function returned false.
+ * 
+ * @param { An Array }: Function takes in an array input
+ * @param { A Function }: Function takes in a function input
+ * 
+ * @return { An Array }: Function returns a new array filled with values from the input array that have resolved false when passed into the input function.
+ */
+function reject(array, func){
+    var newArray = [];  //  initialize newArray
+    for (var i = 0; i < array.length; i++){ //  iterate over array
+        if (!func(array[i], i, array)){ //  test if passing element, index, and array returns not true
+            newArray.push(array[i]);    //  if not true, push into newArray
+        }
+    }
+return newArray;    //  returns newArray
+}
+module.exports.reject = reject;
+
+/**
+ * partition: Function takes in an array input and a function input and returns a new array with two sub arrays containing values from the input array that have resolved truthy or falsy when passed through the input function.
+ * 
+ * @param { An Array }: Function takes in an input array.
+ * @param { A Function }: Function takes in an input function.
+ * 
+ * @return { An Array }: Function returns an array with two sub arrays.  One inner array contains values from the input array that have resolved truthy, the other contains values from the input array that have returned falsy.
+ */
+function partition(array, func){
+    var newArray = [[],[]]; //  initialize newArray with two sub arrays
+    for (var i = 0; i < array.length; i++){ //  iterate through array
+        if (func(array[i], i, array)){  //  test if passing element, index, or array is truthy
+            newArray[0].push(array[i]); //  if truthy, push element into newArray[0]
+        }   else {  //  else, is falsy
+            newArray[1].push(array[i]); //  pushes element into newArray[1]
+        } 
+    }
+return newArray;    //  returns newArray
+}
+module.exports.partition = partition;
+
+/**
+ * map: Function takes in a collection and a function, then returns a new array containing return values from passing the values from the input collection into the input function.
+ * 
+ * @param { A Collection }: Function takes in a collection input.
+ * @param { A Function }: Function takes in a function input.
+ * 
+ * @return { An Array }: Function returns an array with the returned values resulting from passing the input collection values into the input function.
+ */
+function map(collection, func){
+    var newArray = [];  //  initialize newArray
+        if (Array.isArray(collection)){ //  test if collection is an array
+            for (var i = 0; i < collection.length; i++){    //  if true, iterate through array
+                newArray.push(func(collection[i], i, collection));  //  push the result of passing element, index, or collection into newArray
+            }   
+        }   else {  //  else, collection is an object
+            for (var key in collection){    //  iterate through collection object
+                newArray.push(func(collection[key], key, collection));  //  push the result of passing value, property or collection into func
+            }
+        }
+    return newArray;    //  returns newArray
+}
+module.exports.map = map;
+
+/**
+ * pluck: Function takes in an array of objects and a property, then returns an array containing the values contained in the input property within the input array of objects.
+ * 
+ * @param { An Array }: Function contains an input array of objects.
+ * @param { A Property }: Function takes a property input.
+ * 
+ * @return { An Array }: Function returns an array containing the values located at the input property of all objects in the input array.
+ */
+function pluck(array, property){
+    //  return f
+   return array.map(function(value){
+    return value[property];
+    });
+}
+module.exports.pluck = pluck;
+
+/**
+ * every: Function takes in a collection and a function, then returns true if all elements of the collection resolve to true when passed into the input function.  The function will return false if even one element resolves to false.  If no function is given, return the boolean value of the element itself.
+ * 
+ * @param { A Collection }: Function takes in a collection input.
+ * @param { A Function }: Function takes in an input function.
+ * 
+ * @return { Boolean }: Function returns a boolean of true only if all elements in the collection resolve to true.
+ */
+function every(collection, func){
+    //  determine if collection is array
+    if (Array.isArray(collection)){
+        //determine if func wasn't passed in
+        if (func === undefined){
+            for (var i = 0; i < collection.length; i++){  //   iterate
+            //determine if the current item is not truthy (faster)
+            if (!collection[i]){
+                // return false
+                return false;
+                }
+            }
+        }else {//  is array and func was passed
+            for (let i = 0; i < collection.length; i++){
+                //determine if current value return false when passed into func
+                if (func(collection[i], i, collection) === false){
+                    return false;
+                }
+            }
+        }
+    }else { // it was an object
+        if (func === undefined){//  determine if current value returns false when passed into func
+            for (var key in collection){// 
+                if (!collection[key]){
+                    return false;
+                    }
+                }
+            }else { //  func is passed
+                for (var key in collection){    //  iterate through object
+                    if (func(collection[key], key, collection) === false){
+                        return false;
+                    }
+                }
+            }
+    } 
+    return true;
+}
+module.exports.every = every;
+
+/**
+ * some: Function takes a collection and a function, then returns true if any of the elements of the input collection resolve to true when passed into the input function.
+ * 
+ * @param { A Collection }: Function takes a collection input.
+ * @param { A Function }: Function takes in a function input.
+ * 
+ * @return { Boolean }: Function returns a true if even one of the elements of the input collection resolves to true when passed into the input function.  Function returns false only if all elements return false when passed into input function.
+ */
+function some(collection, func){
+    if (Array.isArray(collection)){ //  test if collection is array
+            if (func === undefined){ // test if func is not passed
+                for (var i = 0; i < collection.length; i++){    //  loop through collection
+                    if (collection[i]){ //  test if at least one item is true
+                        return true;    //  return true
+                    }
+                }
+            }else{  //  func is passed
+                for (var i = 0; i < collection.length; i++){    //  iterate through collection
+                    if (func(collection[i], i, collection) === true){    // Test if element is true
+                        return true;    // return true
+                    }
+                }
+            }
+    }else { //  else collection is an object
+        if (func === undefined){ //  test if func is not passed
+            for (var key in collection){    //  iterate through object
+                if (func(collection[key], key, collection)){    //  Test if element is true
+                    return true;    //  return true
+                }
+            }
+        }else {
+            for (var key in collection){
+                if (func(collection[key], key, collection)){
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+module.exports.some = some;
+
+/**
+ * reduce: Function takes in an array, a function and a seed value.  The function will iterate through the input array passing each element of the input array into the function input with the arguments of: previous result, current element, and input array.  On the last iteration, the function will return the result of the last function call. 
+ * 
+ * @param { An Array }: Function takes in an input array.
+ * @param { }
+ */
+function reduce(array, func, seed){
+    //  create result variable
+    let result;
+    //  determine if seed did not receive a value
+    if (seed === undefined){
+        result = array[0];
+        for (let i = 1; i < array.length; i++){ //  iterate through array at 1 index
+            result = func(result, array[i], i, array);  //
+        }
+    } else {    //  else it did
+        result = seed;
+        for (let i = 0; i < array.length; i++){
+            result = func(result, array[i], i, array);
+        }
+    }
+
+return result;
+}
+module.exports.reduce = reduce;

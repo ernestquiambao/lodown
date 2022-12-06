@@ -131,6 +131,38 @@ function indexOf(arr, val){
 module.exports.indexOf = indexOf;
 
 /**
+ * contains: Function takes an array and a value, then returns true if the array contains the value and false otherwise.
+ * 
+ * @param { An Array }: Function takes in an array.
+ * @param { Any Value }: Function takes in any value.
+ * 
+ * @return { Boolean }: Function returns true if the value is in the array; false otherwise.
+ */
+function contains(array, value){
+    //  tests if array includes value.  Returns true if true, false if false
+    return (array.includes(value)? true : false);
+}
+module.exports.contains = contains;
+
+/**
+ * each: Function takes a collection and a function.  If the collection is an array, the function calls the function for each element in the array with the element, index, and array as arguments.  If the collection is an object, the function calls the function for each property with the value, key, and object as arguments.
+ * 
+ * @param { A Collection }: Function takes in a collection.
+ * @param { A Function }: Function takes in a function.
+ */
+function each(collection, func){
+    if (Array.isArray(collection)){ //  tests if collection is an array
+        for (var i = 0; i < collection.length; i++){    //  iterate through array
+            func(collection[i], i, collection)  //  call function for each element, index, and collection
+        }
+    }   else {  //  else it's an object
+        for (var key in collection){    //  iterate through object
+            func(collection[key], key, collection)  //  call function for each property value, key, collection
+        }
+    }
+}
+module.exports.each = each;
+
+/**
  * 
  */
-
